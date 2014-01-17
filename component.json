@@ -1,0 +1,11 @@
+{
+  "name": "hades-validate",
+  "description": "A plugin that adds validators to hades models.",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": ["index.js"],
+  "development": {
+    "component/assert": "*",
+    "segmentio/hades": "*"
+  }
+}
