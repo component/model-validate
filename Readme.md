@@ -43,7 +43,7 @@ if (!valid) {}
 
 #### .validator([attr], fn)
 
-  Register a validator `fn`. It can either:
+  Register a validator `fn`. It can be either:
  
   * **attribute specific** - passing an `attr`, in which case it will be called with the value of `attr`.
   * **global** - omitting the `attr`, in which case it will be called with the model itself.
