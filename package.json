@@ -1,7 +1,7 @@
 {
   "name": "hades-validate",
-  "description": "A plugin that adds validators to hades models.",
-  "version": "0.0.0",
+  "description": "A plugin that adds validators to Hades models.",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": [
     "index.js"
