@@ -9,40 +9,56 @@ module.exports = validate;
  * Return a `plugin` function with `options`.
  *
  * @param {Object} options (optional)
- *   @property {String} separator
  */
 
 function validate (options) {
   options = options || {};
 
   return function plugin (Model) {
+
+    /**
+     * Global validators.
+     */
+
     Model.validators = [];
 
     /**
-     * Add a `validator` to the Model.
+     * Add a validator `fn` to the Model with optional `attr` scope.
      *
-     * @param {Function} validator
+     * @param {String} attr (optional)
+     * @param {Function} fn
      */
 
-    Model.validator = function (validator) {
-      this.validators.push(validator);
+    Model.validator = function (attr, fn) {
+      if ('function' == typeof attr) fn = attr, attr = null;
+
+      if (attr) {
+        var schema = this.attrs[attr];
+        if (!schema) throw new Error('unrecognized attribute "' + attr + '"');
+        schema.validators = schema.validators || [];
+        schema.validators.push(fn);
+      } else {
+        this.validators.push(fn);
+      }
+
       return this;
     };
 
     /**
-     * Register an error `message` on `attr`.
+     * Mark as `attr` as invalid with a `message` and optional `context`.
      *
      * @param {String} attr
      * @param {String} message
+     * @param {Object} context (optional)
      * @return {Model}
      */
 
-    Model.prototype.error = function (attr, message) {
+    Model.prototype.invalid = function (attr, message, context) {
+      context = context || {};
+      context.attr = attr;
+      context.message = message;
       this.errors = this.errors || [];
-      this.errors.push({
-        attr: attr,
-        message: message
-      });
+      this.errors.push(context);
       return this;
     };
 
@@ -53,10 +69,27 @@ function validate (options) {
      * @return {Boolean}
      */
 
-    Model.prototype.validate = function(){
+    Model.prototype.validate = function () {
       var fns = this.Model.validators;
       this.errors = [];
+
+      // global
       for (var i = 0, fn; fn = fns[i]; i++) fn(this);
+
+      // attribute-specific
+      for (var key in this.Model.attrs) {
+        var schema = this.Model.attrs[key];
+        var vals = schema.validators;
+        var value = this.attrs[key];
+        if (!vals) continue;
+
+        for (var j = 0, val; val = vals[j]; j++) {
+          var valid = val(value);
+          if (valid) continue;
+          this.invalid(key, '"' + key + '" is invalid', { value: value });
+        }
+      }
+
       return ! this.errors.length;
     };
 
