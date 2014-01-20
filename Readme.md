@@ -11,7 +11,7 @@
 
 ```js
 var model = require('model');
-var validate = require('model-validate');
+var validate = require('validate');
 var isEmail = require('is-email');
 var isUrl = require('is-url');
 
@@ -49,7 +49,7 @@ if (!valid) {}
 
 #### #validate
 
-  Validate the model, returning a boolean of its validity, and populating `model.errors` with errors for each failed validation.
+  Validate the model, returning a boolean of its validity, and populating `model.errors` for each failed validation.
 
 #### #invalid(attr, message [context])
 
