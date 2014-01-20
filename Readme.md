@@ -44,15 +44,13 @@ if (!valid) {}
 
   Register a validator `fn`. It can be either:
  
-  * **attribute specific** - passing an `attr`, in which case it will be called with the value of `attr`.
+  * **attribute specific** - passing an `attr`, in which case it will be called with the value of `attr`. Attribute-specific validators can also be specified by just adding a `validators` property to an attribute's options.
   * **global** - omitting the `attr`, in which case it will be called with the model itself.
-
-  Attribute-specific validators can also be specified by just adding a `validators` property to an attribute's options.
-
-#### #invalid(attr, message [context])
-
-  Mark an `attr` as invalid, with a `message` and optional extra `context`.
 
 #### #validate
 
   Validate the model, returning a boolean of its validity, and populating `model.errors` with errors for each failed validation.
+
+#### #invalid(attr, message [context])
+
+  Mark an `attr` as invalid, with a `message` and optional extra `context`.
