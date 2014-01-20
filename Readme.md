@@ -1,17 +1,16 @@
 
-# hades-validate
+# model-validate
 
-  A plugin that adds validators to Hades models.
+  A plugin that adds validators to a model.
 
 ## Installation
 
-    $ npm install segmentio/hades-validate
-    $ component install segmentio/hades-validate
+    $ component install component/model-validate
 
 ## Example
 
 ```js
-var hades = require('hades');
+var model = require('model');
 var validate = require('validate');
 var isEmail = require('is-email');
 var isUrl = require('is-url');
@@ -20,7 +19,7 @@ var isUrl = require('is-url');
  * User model.
  */
 
-var User = hades()
+var User = model()
   .use(validate())
   .attr('id')
   .attr('email', { validators: [isEmail] })

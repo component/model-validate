@@ -3,37 +3,37 @@ var assert = require('assert');
 var noop = function(){};
 
 try {
-  var validate = require('hades-validate');
-  var hades = require('hades');
+  var validate = require('model-validate');
+  var create = require('model');
 } catch (e) {
   var validate = require('..');
-  var hades = require('../../hades');
+  var create = require('../../model');
 }
 
-describe('hades-validate', function () {
+describe('model-validate', function () {
 
   describe('.validators', function () {
     it('should be an array', function () {
-      var Model = hades().use(validate());
+      var Model = create('user').use(validate());
       assert(Model.validators instanceof Array);
     });
   });
 
   describe('.validator', function () {
     it('should add a global validator', function () {
-      var Model = hades().use(validate()).validator(noop);
+      var Model = create('user').use(validate()).validator(noop);
       assert.equal(noop, Model.validators[0]);
     });
 
     it('should add an attr validator', function () {
-      var Model = hades().use(validate()).attr('id').validator('id', noop);
+      var Model = create('user').use(validate()).attr('id').validator('id', noop);
       assert.equal(noop, Model.attrs.id.validators[0]);
     });
   });
 
   describe('#invalid', function () {
     it('should add an error object', function () {
-      var Model = hades().use(validate()).attr('name');
+      var Model = create('user').use(validate()).attr('name');
       var model = new Model();
       model.invalid('name', 'message', { context: true });
       assert.deepEqual(model.errors[0], {
@@ -46,7 +46,7 @@ describe('hades-validate', function () {
 
   describe('#validate', function () {
     it('should call global validators with the model', function (done) {
-      var Model = hades().use(validate()).validator(fn);
+      var Model = create('user').use(validate()).validator(fn);
       var model = new Model();
       model.validate();
 
@@ -57,7 +57,7 @@ describe('hades-validate', function () {
     });
 
     it('should call attr validators with the value', function (done) {
-      var Model = hades().use(validate()).attr('name').validator('name', fn);
+      var Model = create('user').use(validate()).attr('name').validator('name', fn);
       var model = new Model({ name: 'Name' });
       model.validate();
 
@@ -68,7 +68,7 @@ describe('hades-validate', function () {
     });
 
     it('should fail on global validators', function () {
-      var Model = hades()
+      var Model = create('user')
         .use(validate())
         .attr('name')
         .validator(fn);
@@ -86,7 +86,7 @@ describe('hades-validate', function () {
     });
 
     it('should fail on attr validators', function () {
-      var Model = hades()
+      var Model = create('user')
         .use(validate())
         .attr('name')
         .validator('name', fn);
