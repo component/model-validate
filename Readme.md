@@ -11,7 +11,7 @@
 
 ```js
 var model = require('model');
-var validate = require('validate');
+var validate = require('model-validate');
 var isEmail = require('is-email');
 var isUrl = require('is-url');
 
